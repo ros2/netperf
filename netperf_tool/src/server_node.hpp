@@ -113,7 +113,10 @@ public:
   std::vector<std::string>
   extract_new_clients();
 
-  /// Extract until results of an experiment are available or a new client is found.
+  /// Wait until results of an experiment are available or a new client is found.
+  /**
+   * \param[in] timeout Maximum time to wait.
+   */
   void
   wait_for_results_available(std::chrono::nanoseconds timeout);
 

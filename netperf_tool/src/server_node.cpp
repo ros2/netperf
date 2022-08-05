@@ -102,6 +102,14 @@ ServerNode::handle_msg(
   notify_cv_.notify_one();
 }
 
+static
+double
+to_ms(std::chrono::nanoseconds duration)
+{
+  using ms = std::chrono::duration<double, std::milli>;
+  return std::chrono::duration_cast<ms>(duration).count();
+}
+
 void
 ServerNode::handle_get_results_request(
   netperf_tool_interfaces::srv::GetResults::Request::SharedPtr req,
@@ -123,37 +131,39 @@ ServerNode::handle_get_results_request(
     collected_info.message_infos.begin(),
     collected_info.message_infos.end(),
     0.0,
-    [n_items = static_cast<double>(collected_info.message_infos.size())](auto lhs, auto rhs) {
-      return lhs + static_cast<double>(rhs.latency.count()) / 1e6 / n_items;
+    [n_items = static_cast<double>(collected_info.message_infos.size())](
+      const auto average, const auto message_info)
+    {
+      return average + to_ms(message_info.latency) / n_items;
     });
   auto latency_var_ms2 = std::accumulate(
     collected_info.message_infos.begin(),
     collected_info.message_infos.end(),
     0.0,
     [latency_avg_ms, div = static_cast<double>(collected_info.message_infos.size() - 1)](
-      auto lhs, auto rhs)
+      const auto variance, const auto message_info)
     {
-      auto diff = static_cast<double>(rhs.latency.count()) / 1e6 - latency_avg_ms;
-      return lhs + diff * diff / div;
+      auto diff = to_ms(message_info.latency) - latency_avg_ms;
+      return variance + diff * diff / div;
     });
   auto latency_min_max_its = std::minmax_element(
     collected_info.message_infos.begin(),
     collected_info.message_infos.end(),
-    [](auto lhs, auto rhs) {
+    [](const auto lhs, const auto rhs) {
       return lhs.latency < rhs.latency;
     });
   rep->latency_avg_ms = latency_avg_ms;
   rep->latency_stdev_ms = std::sqrt(latency_var_ms2);
-  rep->latency_min_ms = static_cast<double>(latency_min_max_its.first->latency.count()) / 1e6;
-  rep->latency_max_ms = static_cast<double>(latency_min_max_its.second->latency.count()) / 1e6;
+  rep->latency_min_ms = to_ms(latency_min_max_its.first->latency);
+  rep->latency_max_ms = to_ms(latency_min_max_its.second->latency);
 
   // calculate total bytes transferred
   rep->total_bytes = std::accumulate(
     collected_info.message_infos.begin(),
     collected_info.message_infos.end(),
     0u,
-    [](auto lhs, auto rhs) {
-      return lhs + rhs.serialized_size;
+    [](const auto accum, const auto message_info) {
+      return accum + message_info.serialized_size;
     });
 
   // messages lost and lost

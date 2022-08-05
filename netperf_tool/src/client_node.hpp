@@ -105,7 +105,7 @@ public:
   /// Wait until publishing remaining messages and get statistics from server.
   /**
    * This should be called after stopping to publish.
-   * \param[in] executor Executor used to wait for a server response.
+   * \param[in] exec Executor used to wait for a server response.
    *  The executor should not be already spinning.
    */
   void

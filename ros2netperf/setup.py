@@ -18,8 +18,8 @@ setup(
     author_email='ivanpauno@ekumenlabs.com',
     maintainer='Aditya Pande, Audrow Nash, Michael Jeronimo',
     maintainer_email='aditya.pande@openrobotics.org, audrow@openrobotics.org, michael.jeronimo@openrobotics.org',  # noqa: E501
-    url='https://github.com/ros2/ros2cli/tree/master/ros2topic',
-    download_url='https://github.com/ros2/ros2cli/releases',
+    url='https://github.com/ros2/netperf/tree/rolling/ros2netperf',
+    download_url='https://github.com/ros2/netperf',
     keywords=[],
     classifiers=[
         'Environment :: Console',
