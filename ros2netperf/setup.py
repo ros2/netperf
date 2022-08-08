@@ -5,7 +5,7 @@ package_name = 'ros2netperf'
 
 setup(
     name=package_name,
-    version='0.19.0',
+    version='0.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/' + package_name, ['package.xml']),
@@ -16,8 +16,8 @@ setup(
     zip_safe=True,
     author='Ivan Santiago Paunovic',
     author_email='ivanpauno@ekumenlabs.com',
-    maintainer='Aditya Pande, Audrow Nash, Michael Jeronimo',
-    maintainer_email='aditya.pande@openrobotics.org, audrow@openrobotics.org, michael.jeronimo@openrobotics.org',  # noqa: E501
+    maintainer='Ivan Santiago Paunovic',
+    maintainer_email='ivanpauno@ekumenlabs.com',
     url='https://github.com/ros2/netperf/tree/rolling/ros2netperf',
     download_url='https://github.com/ros2/netperf',
     keywords=[],
