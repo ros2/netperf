@@ -72,7 +72,7 @@ def add_qos_arguments_to_parser(parser):
     parser.add_argument(
         '--qos-reliability',
         choices=QoSReliabilityPolicy.short_keys(),
-        help='Quality of service reliability setting to publish with '
+        help='Quality of service reliability setting  '
                 '(overrides reliability value of --qos-profile option, default: {})'
                 .format(default_profile.reliability.short_key))
     parser.add_argument(
