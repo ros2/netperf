@@ -61,7 +61,7 @@ def add_qos_arguments_to_parser(parser):
     default_profile = get_default_qos_profile()
     parser.add_argument(
         '--qos-depth', metavar='N', type=int, default=-1,
-        help='Queue size setting to publish with '
+        help='Queue size setting '
                 '(overrides depth value of --qos-profile option)')
     parser.add_argument(
         '--qos-history',
