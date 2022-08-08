@@ -57,7 +57,7 @@ def add_qos_arguments_to_parser(parser):
     parser.add_argument(
         '--qos-profile',
         choices=QoSPresetProfiles.short_keys(),
-        help='Quality of service preset profile to publish')
+        help='Quality of service preset profile for server and client communication')
     default_profile = get_default_qos_profile()
     parser.add_argument(
         '--qos-depth', metavar='N', type=int, default=-1,
