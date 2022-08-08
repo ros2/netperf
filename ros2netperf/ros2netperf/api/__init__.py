@@ -66,7 +66,7 @@ def add_qos_arguments_to_parser(parser):
     parser.add_argument(
         '--qos-history',
         choices=QoSHistoryPolicy.short_keys(),
-        help='History of samples setting to publish with '
+        help='History of samples setting '
                 '(overrides history value of --qos-profile option, default: {})'
                 .format(default_profile.history.short_key))
     parser.add_argument(
