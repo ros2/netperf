@@ -78,7 +78,7 @@ def add_qos_arguments_to_parser(parser):
     parser.add_argument(
         '--qos-durability',
         choices=QoSDurabilityPolicy.short_keys(),
-        help='Quality of service durability setting to publish with '
+        help='Quality of service durability setting '
                 '(overrides durability value of --qos-profile option, default: {})'
                 .format(default_profile.durability.short_key))
 
