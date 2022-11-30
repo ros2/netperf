@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import csv
+
 from rclpy.qos import QoSDurabilityPolicy
 from rclpy.qos import QoSHistoryPolicy
 from rclpy.qos import QoSPresetProfiles
@@ -97,18 +99,48 @@ def get_qos_profile_from_args(args):
 
 def print_stats_header():
     print(
-    '[ id] \tDuration\tTransfer\tBandwidth\t\tLost/Total\t\t'
+    '[ id] \tDuration\tM Size\tTransfer\tBandwidth\t\tLost/Total\t\t'
     'Latency avg/min/max/stdev')
 
 
-def print_results(stats, *, id):
+def _calculte_other_stats(stats):
+    duration_s = float(stats.experiment_duration_ns) / 1e9
     total_MB = stats.total_bytes / 1024 / 1024
     bw = float(stats.total_bytes) * 8. * 1e3 / float(stats.experiment_duration_ns)
     lost_pct = 100 * float(stats.messages_lost) / float(stats.messages_total)
+    return duration_s, total_MB, bw, lost_pct
+
+
+def print_results(message_serialized_size, stats, *, id):
+    duration_s, total_MB, bw, lost_pct = _calculte_other_stats(stats)
     id_str = '' if id is None else f'[ {id}]\t'
     print(
-        f'{id_str}{float(stats.experiment_duration_ns)/1e9:.2f} sec'
-        f'\t{total_MB:.2f} MBytes\t{bw:.4f} Mbits/sec\t{stats.messages_lost}/'
-        f'  {stats.messages_total} ({lost_pct:.2f}%)\t{stats.latency_avg_ms:.4f}/'
-        f' {stats.latency_min_ms:.4f}/ {stats.latency_max_ms:.4f}'
+        f'{id_str}{duration_s:.2f} sec'
+        f'\t{message_serialized_size} B\t{total_MB:.2f} MBytes\t{bw:.4f} '
+        f'Mbits/sec\t{stats.messages_lost}/  {stats.messages_total} ({lost_pct:.2f}%)\t'
+        f'{stats.latency_avg_ms:.4f}/ {stats.latency_min_ms:.4f}/ {stats.latency_max_ms:.4f}'
         f' / {stats.latency_stdev_ms:.4f} ms')
+
+
+def add_results_to_csv_output(message_serialized_size, stats, csv_output, *, id):
+    duration_s, total_MB, bw, lost_pct = _calculte_other_stats(stats)
+    csv_output.append([
+        id if id is not None else '',
+        duration_s,
+        message_serialized_size,
+        total_MB,
+        bw,
+        stats.messages_lost,
+        stats.messages_total,
+        lost_pct,
+        stats.latency_avg_ms,
+        stats.latency_min_ms,
+        stats.latency_max_ms,
+        stats.latency_stdev_ms,
+    ])
+
+
+def write_csv_output_to_file(csv_output, file_path, mode):
+    with file_path.open(mode=mode) as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_output)

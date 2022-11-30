@@ -87,4 +87,4 @@ class ClientVerb(VerbExtension):
             raise
 
         print_stats_header()
-        print_results(results.statistics, id=0)
+        print_results(args.message_size, results.statistics, id=0)
