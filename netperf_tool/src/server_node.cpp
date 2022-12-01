@@ -161,7 +161,7 @@ ServerNode::handle_get_results_request(
   rep->total_bytes = std::accumulate(
     collected_info.message_infos.begin(),
     collected_info.message_infos.end(),
-    0u,
+    0uLL,
     [](const auto accum, const auto message_info) {
       return accum + message_info.serialized_size;
     });
