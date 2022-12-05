@@ -148,7 +148,7 @@ private:
   /// Service used to make experiment statistics available to netperf clients.
   rclcpp::ServiceBase::SharedPtr srv_;
   /// Clock used to get timestamps.
-  rclcpp::Clock system_time_clock_{RCL_SYSTEM_TIME};
+  rclcpp::Clock system_time_clock_{RCL_ROS_TIME};
 };
 }  // namespace netperf_tool
 #endif  // SERVER_NODE_HPP_
