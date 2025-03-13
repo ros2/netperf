@@ -119,7 +119,9 @@ ServerNode::handle_get_results_request(
   {
     std::lock_guard guard{pub_gid_to_collected_info_map_mutex_};
     auto it = pub_gid_to_collected_info_map_.find(req->publisher_gid);
-    if (it == pub_gid_to_collected_info_map_.end() && pub_gid_to_collected_info_map_.size() == 1uLL) {
+    if (it == pub_gid_to_collected_info_map_.end() &&
+      pub_gid_to_collected_info_map_.size() == 1uLL)
+    {
       // workaround for cyclonedds bug, only works one test a time
       // https://github.com/ros2/rmw_cyclonedds/issues/377
       // TODO(ivanpauno): Do something else
