@@ -2,7 +2,7 @@ name: ROS 2 CI
 on:
   pull_request:
     paths-ignore: ['**.md', '**.rst', '.gitignore']
-    branches: [main]
+    branches: [humble]
     types: [opened, reopened, synchronize]
 jobs:
   build_and_test:
