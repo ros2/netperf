@@ -34,7 +34,7 @@ find_package(pybind11 REQUIRED)
 
 ament_python_install_package(${PROJECT_NAME})
 
-pybind11_add_module(netperf_tool_impl SHARED
+pybind11_add_module(netperf_tool_impl
   src/client_node.cpp
   src/client_runner.cpp
   src/node_runner.cpp
